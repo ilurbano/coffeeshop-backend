@@ -57,6 +57,8 @@ const registerCustomer = async (userData) => {
       password: hashedPassword,
     });
 
+    delete newUser.password;
+
     return AuthResponses.registration.success(newUser);
   } catch (error) {
     LogUtils.logError(`Error in registerCustomer: ${error.message}`);
@@ -104,6 +106,8 @@ const login = async (email, password) => {
     if (!isPasswordMatch) return AuthResponses.login.invalidData(['email', 'password']);
 
     const token = generateJWT(user);
+
+    delete user.password;
 
     return AuthResponses.login.success({ user, token });
   } catch (error) {
