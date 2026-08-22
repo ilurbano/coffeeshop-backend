@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 
+const { USER_ROLES } = require('../constants/UserConstants');
+
+const USER_ROLES_ENUM = Object.values(USER_ROLES);
+
 const schema = new mongoose.Schema({
 
   //============//
@@ -54,9 +58,8 @@ const schema = new mongoose.Schema({
   },
   role: {
     type: String,
-    // TODO: Confirm if `manager` and `admin` roles should be merged or kept separate.
-    enum: ['customer', 'delivery', 'crew', 'manager', 'admin'],
-    default: 'customer',
+    enum: USER_ROLES_ENUM,
+    default: USER_ROLES.CUSTOMER,
   },
 }, { timestamps: true });
 
