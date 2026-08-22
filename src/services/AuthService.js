@@ -97,7 +97,8 @@ const login = async (email, password) => {
     // User enumeration attack trap
 
     if (!user) {
-      await passwordsMatch(password, '$2b$10$invalidsaltinvalidpassword') // Dummy hash for timing attack mitigation
+      // Dummy hash for timing attack mitigation
+      await passwordsMatch(password, '$2a$10$2kOvhI7tsdn5dimSrOISxe8BDG7YlzRz6xiu8CPC.CJBL1nzzkaKq')
       return AuthResponses.login.invalidData(['email', 'password']);
     }
 
