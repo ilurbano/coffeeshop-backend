@@ -44,6 +44,7 @@ const registerCustomer = async (userData) => {
       or: [
         { email: email.trim().toLowerCase() },
         { username: username.trim() },
+        { contactNumber: contactNumber.trim() }
       ]
     });
 
@@ -77,6 +78,7 @@ const registerCustomer = async (userData) => {
 
 const login = async (email, password) => {
   let username;
+  let contactNumber;
 
   // Validate required fields
 
@@ -88,14 +90,20 @@ const login = async (email, password) => {
   if (missingFields.length > 0)
     return AuthResponses.login.missingData(missingFields);
 
-  // Assume username if email is not valid, otherwise treat it as email
-  if (!isValidEmail(email.trim())) username = email.trim();
+  // Assume contact number if email is not valid and is a valid phone number,
+  // otherwise assume username
+  
+  if (!isValidEmail(email.trim()) && isValidPhoneNumber(email.trim()))
+    contactNumber = email.trim();
+  else
+    username = email.trim();
 
   try {
     const user = await User.findOne({
       $or: [
         { email: email.trim().toLowerCase() },
-        { username: username }
+        { username },
+        { contactNumber }
       ]
     });
 
