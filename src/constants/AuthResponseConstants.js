@@ -1,4 +1,4 @@
-const AUTH_RESPONSE_CONSTANTS = {
+const AUTH_RESPONSES = {
 
   //============//
   // AUTH (1xx) //
@@ -49,4 +49,4 @@ const AUTH_RESPONSE_CONSTANTS = {
 
 };
 
-module.exports = AUTH_RESPONSE_CONSTANTS;
+module.exports = AUTH_RESPONSES;
