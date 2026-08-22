@@ -107,7 +107,7 @@ const login = async (email, password) => {
 
     return AuthResponses.login.success({ user, token });
   } catch (error) {
-    LogUtils.logError(`Error in loginUser: ${error.message}`);
+    LogUtils.logError(`Error in login: ${error.message}`);
     return GenericResponses.internalServerError();
   }
 }
