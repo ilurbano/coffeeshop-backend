@@ -41,7 +41,7 @@ const registerCustomer = async (userData) => {
 
   try {
     const existingUser = await User.findOne({
-      or: [
+      $or: [
         { email: email.trim().toLowerCase() },
         { username: username.trim() },
         { contactNumber: contactNumber.trim() }
