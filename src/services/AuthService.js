@@ -40,7 +40,12 @@ const registerCustomer = async (userData) => {
     return AuthResponses.registration.invalidData(invalidFields);
 
   try {
-    const existingUser = await User.findOne({ email: userData.email, username: userData.username });
+    const existingUser = await User.findOne({
+      or: [
+        { email: email.trim().toLowerCase() },
+        { username: username.trim() },
+      ]
+    });
 
     if (existingUser) return AuthResponses.registration.userAlreadyExists();
 
