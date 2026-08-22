@@ -1,0 +1,84 @@
+$kind: http-request
+name: Register Customer
+url: "{{authApi}}/register-customer"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"firstName\": \"{{cFirstName}}\",\r
+
+    \    \"middleName\": \"{{cMiddleName}}\",\r
+
+    \    \"lastName\": \"{{cLastName}}\",\r
+
+    \    \"contactNumber\": \"{{cContactNum}}\",\r
+
+    \r
+
+    \    \"username\": \"{{cUsername}}\",\r
+
+    \    \"email\": \"{{cEmail}}\",\r
+
+    \    \"password\": \"{{cPassword}}\"\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: "const status = pm.response.code;\r
+
+      const responseBody = pm.response.json();\r
+
+      \r
+
+      const code = responseBody.code;\r
+
+      const message = responseBody.message;\r
+
+      const payload = responseBody.payload;\r
+
+      \r
+
+      // TESTS //\r
+
+      \r
+
+      pm.test(\"Status code is 201\", () => {\r
+
+      \  pm.expect(status).to.eql(201);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Response code is 100\", () => {\r
+
+      \  pm.expect(code).to.eql(100);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Registration was successful\", () => {\r
+
+      \  pm.expect(message).to.eql(\"Registration successful.\");\r
+
+      });\r
+
+      \r
+
+      pm.test(\"User payload exists\", () => {\r
+
+      \  pm.expect(payload).to.exist;\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Password is not exposed\", () => {\r
+
+      \  pm.expect(payload).to.not.have.property(\"password\");\r
+
+      });"
+    language: text/javascript
+order: 1787427013857
