@@ -68,7 +68,7 @@ const registerCustomer = async (userData) => {
 // USER LOGIN //
 //============//
 
-const loginUser = async (email, password) => {
+const login = async (email, password) => {
   let username;
 
   // Validate required fields
@@ -118,5 +118,5 @@ const loginUser = async (email, password) => {
 
 module.exports = {
   registerCustomer,
-  loginUser,
+  login,
 };

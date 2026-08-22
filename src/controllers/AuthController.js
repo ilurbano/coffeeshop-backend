@@ -22,10 +22,10 @@ const registerCustomer = async (req, res) => {
   }
 }
 
-const loginCustomer = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
 
-  const response = await AuthService.loginCustomer(email, password);
+  const response = await AuthService.login(email, password);
 
   switch (response.code) {
     case AUTH_RESPONSES.login.success.code:
@@ -43,5 +43,5 @@ const loginCustomer = async (req, res) => {
 
 module.exports = {
   registerCustomer,
-  loginCustomer,
+  login,
 };

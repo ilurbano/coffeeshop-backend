@@ -13,6 +13,6 @@ router.post('/register-customer', AuthController.registerCustomer);
 // USER LOGIN //
 //============//
 
-router.post('/login', AuthController.loginCustomer);
+router.post('/login', AuthController.login);
 
 module.exports = router;
