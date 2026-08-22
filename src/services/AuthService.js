@@ -63,7 +63,7 @@ const registerCustomer = async (userData) => {
       password: hashedPassword,
     });
 
-    delete newUser.password;
+    newUser.password = undefined; // Remove password from the response
 
     return AuthResponses.registration.success(newUser);
   } catch (error) {
@@ -121,7 +121,7 @@ const login = async (email, password) => {
 
     const token = generateJWT(user);
 
-    delete user.password;
+    user.password = undefined; // Remove password from the response
 
     return AuthResponses.login.success({ user, token });
   } catch (error) {
