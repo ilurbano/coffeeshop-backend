@@ -7,6 +7,7 @@
 | Success | 0 |
 | Failed | 1 |
 | Action required | 2 |
+| Internal server error | 3 |
 
 ### Auth (1xx)
 
