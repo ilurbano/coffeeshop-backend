@@ -30,6 +30,12 @@ const schema = new mongoose.Schema({
     minlength: 1,
     maxlength: 50,
   },
+  contactNumber: {
+    type: String,
+    required: true,
+    trim: true,
+    match: [/^(?:\+63|0)9\d{9}$/, 'Please fill a valid contact number'],
+  },
 
   //==================================//
   // AUTHENTICATION AND AUTHORIZATION //
