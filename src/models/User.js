@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
-const { USER_ROLES } = require('../constants/UserConstants');
+const {
+  USER_ROLES,
+  VALID_EMAIL_REGEX,
+  VALID_PHONE_NUMBER_REGEX
+} = require('../constants/UserConstants');
 
 const USER_ROLES_ENUM = Object.values(USER_ROLES);
 
@@ -34,7 +38,7 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    match: [/^(?:\+63|0)9\d{9}$/, 'Please fill a valid contact number'],
+    match: [VALID_PHONE_NUMBER_REGEX, 'Please fill a valid contact number'],
   },
 
   //==================================//
@@ -55,7 +59,7 @@ const schema = new mongoose.Schema({
     unique: true,
     trim: true,
     lowercase: true,
-    match: [/.+@.+\..+/, 'Please fill a valid email address'],
+    match: [VALID_EMAIL_REGEX, 'Please fill a valid email address'],
   },
   password: {
     type: String,

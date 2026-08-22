@@ -7,6 +7,11 @@ const USER_ROLES = {
   ADMIN: 'admin',
 }
 
+const VALID_EMAIL_REGEX = /.+@.+\..+/;
+const VALID_PHONE_NUMBER_REGEX = /^(?:\+63|0)9\d{9}$/;
+
 module.exports = {
   USER_ROLES,
+  VALID_EMAIL_REGEX,
+  VALID_PHONE_NUMBER_REGEX
 };
