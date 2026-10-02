@@ -35,7 +35,7 @@ const login = async (req, res) => {
     case AUTH_RESPONSES.login.missingData.code:
       return res.status(400).json(response);
     case AUTH_RESPONSES.login.invalidData.code:
-      return res.status(400).json(response);
+      return res.status(401).json(response);
     case GENERIC_RESPONSES.internalServerError.code:
       return res.status(500).json(response);
   }
