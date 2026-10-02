@@ -40,6 +40,16 @@ const requireRoles = (roles) => (req, res, next) => {
   next();
 }
 
+const requireCustomer = requireRoles('customer');
+const requireDelivery = requireRoles('delivery');
+const requireCrew = requireRoles('crew');
+const requireManager = requireRoles('manager');
+const requireAdmin = requireRoles('admin');
+
+const requireStaff = requireRoles(['delivery', 'crew', 'manager', 'admin']);
+const requireOperations = requireRoles(['crew', 'manager', 'admin']);
+const requireManagement = requireRoles(['manager', 'admin']);
+
 module.exports = {
   requireToken,
   requireRoles
