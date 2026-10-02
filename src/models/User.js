@@ -37,6 +37,7 @@ const schema = new mongoose.Schema({
   contactNumber: {
     type: String,
     required: true,
+    unique: true,
     trim: true,
     match: [VALID_PHONE_NUMBER_REGEX, 'Please fill a valid contact number'],
   },
