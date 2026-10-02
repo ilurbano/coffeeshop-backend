@@ -35,6 +35,7 @@
 |---|---|
 | Logout success | 120 |
 | Invalid session | 121 |
+| Forbidden | 122 |
 
 #### Forgot Password (13x)
 
