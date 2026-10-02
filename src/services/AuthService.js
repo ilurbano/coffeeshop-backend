@@ -50,6 +50,9 @@ const registerCustomer = async (userData) => {
 
     if (existingUser) return AuthResponses.registration.userAlreadyExists();
 
+    if (typeof password !== 'string' || password.length < 8)
+      return AuthResponses.registration.invalidData(['password']);
+
     const hashedPassword = await encryptPassword(password);
 
     const newUser = await User.create({
