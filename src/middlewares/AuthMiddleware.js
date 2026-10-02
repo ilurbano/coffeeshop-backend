@@ -52,5 +52,15 @@ const requireManagement = requireRoles(['manager', 'admin']);
 
 module.exports = {
   requireToken,
-  requireRoles
+  requireRoles,
+
+  requireCustomer,
+  requireDelivery,
+  requireCrew,
+  requireManager,
+  requireAdmin,
+
+  requireStaff,
+  requireOperations,
+  requireManagement
 };
