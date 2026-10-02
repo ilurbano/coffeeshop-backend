@@ -57,7 +57,7 @@ const registerCustomer = async (userData) => {
 
     const newUser = await User.create({
       firstName: firstName.trim(),
-      middleName: middleName?.trim() || '',
+      middleName: middleName?.trim() || undefined,
       lastName: lastName.trim(),
       contactNumber: contactNumber.trim(),
       
