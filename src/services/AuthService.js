@@ -12,7 +12,7 @@ const { isValidEmail, isValidPhoneNumber } = require('../utils/UserUtils');
 //=======================//
 
 const registerCustomer = async (userData) => {
-  const { firstName, middleName, lastName, contactNumber, username, email, password } = userData;
+  const { firstName, middleName, lastName, contactNumber, username, email, password } = userData || {};
 
   // Validate required fields
 
