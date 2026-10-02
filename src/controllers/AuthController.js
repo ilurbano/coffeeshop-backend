@@ -23,7 +23,7 @@ const registerCustomer = async (req, res) => {
 }
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body || {};
 
   const response = await AuthService.login(email, password);
 
