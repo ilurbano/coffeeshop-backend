@@ -74,6 +74,12 @@ const sessionInvalidSession = (message) => fail(
   AUTH_RESPONSES.session.invalidSession.code
 );
 
+const sessionForbidden = (message) => fail(
+  null,
+  message || AUTH_RESPONSES.session.forbidden.message,
+  AUTH_RESPONSES.session.forbidden.code
+);
+
 //=================//
 // FORGOT PASSWORD //
 //=================//
@@ -149,7 +155,8 @@ module.exports = {
   },
   session: {
     logoutSuccess: sessionLogoutSuccess,
-    invalidSession: sessionInvalidSession
+    invalidSession: sessionInvalidSession,
+    forbidden: sessionForbidden
   },
   forgotPassword: {
     passwordResetSuccess: forgotPasswordResetSuccess,

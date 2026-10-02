@@ -27,6 +27,7 @@ const AUTH_RESPONSES = {
   session: {
     logoutSuccess: { code: 120, message: 'Logout successful.' },
     invalidSession: { code: 121, message: 'Invalid session.' },
+    forbidden: { code: 122, message: 'Forbidden.' },
   },
 
   // FORGOT PASSWORD (13x) //

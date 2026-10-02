@@ -26,6 +26,21 @@ const requireToken = async (req, res, next) => {
   }
 }
 
+const requireRoles = (roles) => (req, res, next) => {
+  let effectiveRoles = roles;
+
+  if (!Array.isArray(roles)) effectiveRoles = [roles];
+
+  if (!req.user || !effectiveRoles.includes(req.user.role)) {
+    return res.status(403).json(
+      AuthResponses.session.forbidden()
+    );
+  }
+
+  next();
+}
+
 module.exports = {
   requireToken,
+  requireRoles
 };
