@@ -1,0 +1,23 @@
+name: Coffee Shop Local
+values:
+  - key: baseUrl
+    value: ''
+  - key: authApi
+    value: ''
+  - key: cFirstName
+    value: ''
+  - key: cMiddleName
+    value: ''
+  - key: cLastName
+    value: ''
+  - key: cContactNum
+    value: ''
+  - key: cUsername
+    value: ''
+  - key: cEmail
+    value: ''
+  - key: cPassword
+    value: ''
+  - key: token
+    value: ''
+color: 60

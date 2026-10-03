@@ -1,0 +1,100 @@
+$kind: http-request
+name: Login User
+url: "{{authApi}}/login"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"email\": \"{{cEmail}}\",\r
+
+    \    \"password\": \"{{cPassword}}\"\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: "const status = pm.response.code;\r
+
+      const responseBody = pm.response.json();\r
+
+      \r
+
+      const code = responseBody.code;\r
+
+      const message = responseBody.message;\r
+
+      const payload = responseBody.payload;\r
+
+      \r
+
+      const user = payload?.user;\r
+
+      const token = payload?.token;\r
+
+      \r
+
+      // TESTS //\r
+
+      \r
+
+      pm.test(\"Status code is 200\", () => {\r
+
+      \  pm.expect(status).to.eql(200);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Response code is 110\", () => {\r
+
+      \  pm.expect(code).to.eql(110);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Login was successful\", () => {\r
+
+      \  pm.expect(message).to.eql(\"Login successful.\");\r
+
+      });\r
+
+      \r
+
+      pm.test(\"User exists\", () => {\r
+
+      \  pm.expect(user).to.exist;\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Password is not exposed\", () => {\r
+
+      \  pm.expect(user).to.not.have.property(\"password\");\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Token exists\", () => {\r
+
+      \  pm.expect(token).to.exist;\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Token is a JWT\", () => {\r
+
+      \  pm.expect(token).to.be.a(\"string\");\r
+
+      \  pm.expect(token.split(\".\")).to.have.lengthOf(3);\r
+
+      });\r
+
+      \r
+
+      pm.environment.set(\"token\", token);"
+    language: text/javascript
+order: 917361164854074

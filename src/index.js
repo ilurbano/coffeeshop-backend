@@ -4,6 +4,8 @@ const express = require('express');
 const http = require('http');
 const mongoose = require('mongoose');
 
+const routes = require('./routes');
+
 //===============//
 // DOTENV CONFIG //
 //===============//
@@ -54,7 +56,7 @@ const startServer = () => {
 
   // TODO: Add routes setup here
   // Import route folder's index.js and use an initializer function.
-  // Example: const initializeRoutes = require('./routes'); initializeRoutes(app);
+  routes.initializeRoutes(app);
 
   app.get('/health', (req, res) => {
     res.sendStatus(200);
