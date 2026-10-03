@@ -32,7 +32,7 @@ const verifyJWT = async (token) => {
 
     return user;
   } catch (error) {
-    LogUtils.logWarn(`Error verifying JWT: ${error.message}`);
+    LogUtils.logWarning(`Error verifying JWT: ${error.message}`);
     return null;
   }
 }
