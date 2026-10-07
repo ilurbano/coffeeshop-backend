@@ -471,7 +471,8 @@ const getCustomerOrders = async (userId) => {
   try {
     return OrderResponses.success(
       await Order.find({ user: userId })
-        .populate('products.product products.addons.addon deliveryRider')
+        .populate('products.product products.addons.addon')
+        .populate({ path: 'deliveryRider', select: '-password' })
         .sort({ createdAt: -1 })
     );
   } catch (error) {
