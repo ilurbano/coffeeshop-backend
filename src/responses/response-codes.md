@@ -54,3 +54,38 @@
 |---|---|
 | Granted | 140 |
 | Denied | 141 |
+
+### Product (2xx)
+
+| Event | Code |
+|---|---|
+| Product operation success | 200 |
+| Product not found | 201 |
+| Missing required product data | 202 |
+| Invalid product data | 203 |
+| Product conflict | 204 |
+
+### Order (3xx)
+
+| Event | Code |
+|---|---|
+| Order operation success | 300 |
+| Order not found | 301 |
+| Missing required order data | 302 |
+| Invalid order data | 303 |
+| Invalid status transition | 304 |
+| Insufficient stock | 305 |
+| Invalid voucher | 306 |
+| Rider conflict | 307 |
+| Forbidden order operation | 308 |
+
+### Voucher (4xx)
+
+| Event | Code |
+|---|---|
+| Voucher operation success | 400 |
+| Voucher not found | 401 |
+| Missing required voucher data | 402 |
+| Invalid voucher data | 403 |
+| Voucher conflict | 404 |
+| Voucher unavailable | 405 |
