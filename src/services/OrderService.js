@@ -514,7 +514,9 @@ const getOrders = async (filters = {}) => {
 
     return OrderResponses.success(
       await Order.find(query)
-        .populate('user products.product products.addons.addon deliveryRider')
+        .populate({ path: 'user', select: '-password' })
+        .populate('products.product products.addons.addon')
+        .populate({ path: 'deliveryRider', select: '-password' })
         .sort({ createdAt: -1 })
     );
   } catch (error) {
@@ -541,7 +543,9 @@ const getDeliveryOrders = async (riderId, mine = false) => {
 
     return OrderResponses.success(
       await Order.find(query)
-        .populate('user products.product products.addons.addon deliveryRider')
+        .populate({ path: 'user', select: '-password' })
+        .populate('products.product products.addons.addon')
+        .populate({ path: 'deliveryRider', select: '-password' })
         .sort({ createdAt: 1 })
     );
   } catch (error) {
@@ -557,7 +561,9 @@ const getOrder = async (id) => {
 
   try {
     const order = await Order.findById(id).populate(
-      'user products.product products.addons.addon deliveryRider'
+      { path: 'user', select: '-password' },
+      'products.product products.addons.addon',
+      { path: 'deliveryRider', select: '-password' }
     );
 
     return order ? OrderResponses.success(order) : OrderResponses.notFound();
