@@ -153,9 +153,9 @@ const restoreStock = async (order) => {
 
     const stock = product.stock + quantity;
     const status =
-      product.status === PRODUCT_STATUS.PHASED_OUT
-        ? product.status
-        : PRODUCT_STATUS.AVAILABLE;
+      product.status === PRODUCT_STATUS.OUT_OF_STOCK
+        ? PRODUCT_STATUS.AVAILABLE
+        : product.status;
 
     await Product.updateOne(
       { _id: id },
