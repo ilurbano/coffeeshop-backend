@@ -362,6 +362,16 @@ const getCustomerVoucher = async (id, userId) => {
   }
 
   try {
+    await VoucherInstance.updateOne(
+      {
+        _id: id,
+        owner: userId,
+        status: VOUCHER_STATUS.ACTIVE,
+        expiresAt: { $lt: new Date() },
+      },
+      { $set: { status: VOUCHER_STATUS.EXPIRED } }
+    );
+
     const voucher = await VoucherInstance.findOne({
       _id: id,
       owner: userId,
