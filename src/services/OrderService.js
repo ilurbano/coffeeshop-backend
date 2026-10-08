@@ -216,6 +216,12 @@ const validateAndPriceItems = async (items) => {
       );
     }
 
+    for (const [id, rule] of configured) {
+      if ((requestedAddons.get(id) || 0) < rule.minQuantity) {
+        invalid.push('products');
+      }
+    }
+
     const addons = [];
 
     for (const [id, quantity] of requestedAddons) {
