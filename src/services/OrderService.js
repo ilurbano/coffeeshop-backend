@@ -597,6 +597,12 @@ const changeStatus = async (id, status, userId, reason) => {
     );
   }
 
+  if (isDeliveryOrder && status === ORDER_STATUS.CLAIMED && !order.deliveryRider) {
+    return OrderResponses.invalidTransition(
+      'Delivery orders must have an assigned rider before being claimed.'
+    );
+  }
+
   const stamp = now();
   const fieldMap = {
     confirmed: ['confirmedAt', 'confirmedBy'],
