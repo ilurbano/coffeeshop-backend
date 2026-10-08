@@ -60,6 +60,39 @@ const validateVoucher = (voucher = {}) => {
 
   if (!Array.isArray(voucher.allowedProducts)) {
     invalid.push('allowedProducts');
+  } else {
+    const seenProducts = new Set();
+
+    for (const rule of voucher.allowedProducts) {
+      if (
+        !isId(rule?.product) ||
+        seenProducts.has(String(rule.product)) ||
+        !Number.isInteger(rule?.minQuantity) ||
+        rule.minQuantity < 1 ||
+        !Array.isArray(rule?.addons)
+      ) {
+        invalid.push('allowedProducts');
+        continue;
+      }
+
+      seenProducts.add(String(rule.product));
+
+      const seenAddons = new Set();
+
+      for (const addon of rule.addons) {
+        if (
+          !isId(addon?.addon) ||
+          seenAddons.has(String(addon.addon)) ||
+          !Number.isInteger(addon?.quantity) ||
+          addon.quantity < 1
+        ) {
+          invalid.push('allowedProducts');
+          continue;
+        }
+
+        seenAddons.add(String(addon.addon));
+      }
+    }
   }
 
   return [...new Set(invalid)];
@@ -141,7 +174,7 @@ const createVoucher = async (data, userId) => {
 
 const getVouchers = async (filters = {}) => {
   try {
-    const query = {};
+    const query = { deletedAt: null };
 
     if (filters.code) {
       query['voucher.code'] = filters.code;
@@ -162,7 +195,7 @@ const getVoucher = async (id) => {
   }
 
   try {
-    const voucher = await VoucherTemplate.findById(id);
+    const voucher = await VoucherTemplate.findOne({ _id: id, deletedAt: null });
     return voucher
       ? VoucherResponses.success(voucher)
       : VoucherResponses.notFound();
@@ -177,7 +210,7 @@ const updateVoucher = async (id, data, userId) => {
     return VoucherResponses.invalidData(['id']);
   }
 
-  const current = await VoucherTemplate.findById(id);
+  const current = await VoucherTemplate.findOne({ _id: id, deletedAt: null });
 
   if (!current) {
     return VoucherResponses.notFound();
@@ -252,13 +285,16 @@ const deleteVoucher = async (id) => {
   }
 
   try {
-    const deleted = await VoucherTemplate.findByIdAndDelete(id);
+    const deleted = await VoucherTemplate.findOneAndUpdate(
+      { _id: id, deletedAt: null },
+      { $set: { deletedAt: new Date() } },
+      { new: true }
+    );
 
     if (!deleted) {
       return VoucherResponses.notFound();
     }
 
-    await VoucherInstance.deleteMany({ template: id });
     return VoucherResponses.success(deleted, 'Voucher deleted successfully.');
   } catch (error) {
     LogUtils.logError(`Error in deleteVoucher: ${error.message}`);
@@ -278,6 +314,7 @@ const claimVoucher = async (code, userId) => {
     const now = new Date();
     template = await VoucherTemplate.findOne({
       'voucher.code': code.trim(),
+      deletedAt: null,
     });
 
     if (!template) {
@@ -316,13 +353,13 @@ const claimVoucher = async (code, userId) => {
         { new: true }
       );
 
-      publicUsageIncremented = true;
-
       if (!claimed) {
         return VoucherResponses.unavailable(
           'Voucher public usage limit has been reached.'
         );
       }
+
+      publicUsageIncremented = true;
     }
 
     const instance = await VoucherInstance.create({

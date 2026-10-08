@@ -849,6 +849,26 @@ const updatePayment = async (id, data, userId) => {
     return OrderResponses.invalidData(['paymentStatus']);
   }
 
+  const invalidPaymentFields = [];
+
+  if (
+    data?.paymentAmount !== undefined &&
+    (typeof data.paymentAmount !== 'number' || data.paymentAmount < 0)
+  ) {
+    invalidPaymentFields.push('paymentAmount');
+  }
+
+  if (
+    data?.paymentChange !== undefined &&
+    (typeof data.paymentChange !== 'number' || data.paymentChange < 0)
+  ) {
+    invalidPaymentFields.push('paymentChange');
+  }
+
+  if (invalidPaymentFields.length) {
+    return OrderResponses.invalidData(invalidPaymentFields);
+  }
+
   order.paymentStatus = data.paymentStatus;
   order.paymentReference = data.paymentReference?.trim();
   order.paymentMethodProvider = data.paymentMethodProvider?.trim();
