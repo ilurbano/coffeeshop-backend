@@ -190,10 +190,14 @@ const updateVoucher = async (id, data, userId) => {
   const invalid = validateVoucher(nextVoucher);
 
   if (data?.startDate !== undefined || data?.endDate !== undefined) {
-    const start = data.startDate ?? current.startDate;
-    const end = data.endDate ?? current.endDate;
+    const start = new Date(data.startDate ?? current.startDate);
+    const end = new Date(data.endDate ?? current.endDate);
 
-    if (new Date(start) >= new Date(end)) {
+    if (
+      Number.isNaN(start.getTime()) ||
+      Number.isNaN(end.getTime()) ||
+      start >= end
+    ) {
       invalid.push('dateRange');
     }
   }
