@@ -88,7 +88,14 @@ const createVoucher = async (data, userId) => {
 
   const invalid = validateVoucher(voucher);
 
-  if (new Date(data.startDate) >= new Date(data.endDate)) {
+  const startDate = new Date(data.startDate);
+  const endDate = new Date(data.endDate);
+
+  if (
+    Number.isNaN(startDate.getTime()) ||
+    Number.isNaN(endDate.getTime()) ||
+    startDate >= endDate
+  ) {
     invalid.push('dateRange');
   }
 
