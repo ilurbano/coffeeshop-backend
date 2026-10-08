@@ -493,9 +493,9 @@ const getCustomerOrder = async (id, userId) => {
   }
 
   try {
-    const order = await Order.findOne({ _id: id, user: userId }).populate(
-      'products.product products.addons.addon deliveryRider'
-    );
+    const order = await Order.findOne({ _id: id, user: userId })
+      .populate('products.product products.addons.addon')
+      .populate({ path: 'deliveryRider', select: '-password' });
 
     return order
       ? OrderResponses.success(order)
