@@ -566,11 +566,10 @@ const getOrder = async (id) => {
   }
 
   try {
-    const order = await Order.findById(id).populate(
-      { path: 'user', select: '-password' },
-      'products.product products.addons.addon',
-      { path: 'deliveryRider', select: '-password' }
-    );
+    const order = await Order.findById(id)
+      .populate({ path: 'user', select: '-password' })
+      .populate('products.product products.addons.addon')
+      .populate({ path: 'deliveryRider', select: '-password' });
 
     return order ? OrderResponses.success(order) : OrderResponses.notFound();
   } catch (error) {
@@ -698,36 +697,61 @@ const assignRider = async (id, riderId) => {
     return OrderResponses.invalidData(['riderId']);
   }
 
-  const order = await Order.findById(id);
+  const order = await Order.findOneAndUpdate(
+    {
+      _id: id,
+      deliveryAddress: { $exists: true },
+      status: {
+        $in: [
+          ORDER_STATUS.READY,
+          ORDER_STATUS.CONFIRMED,
+          ORDER_STATUS.QUEUED,
+        ],
+      },
+      $or: [
+        { deliveryRider: { $exists: false } },
+        { deliveryRider: null },
+        { deliveryRider: riderId },
+      ],
+    },
+    { $set: { deliveryRider: riderId } },
+    { new: true }
+  );
 
   if (!order) {
+    const existing = await Order.findById(id);
+
+    if (!existing) {
+      return OrderResponses.notFound();
+    }
+
+    if (!existing.deliveryAddress) {
+      return OrderResponses.invalidTransition(
+        'Only delivery orders can be assigned to a rider.'
+      );
+    }
+
+    if (
+      ![
+        ORDER_STATUS.READY,
+        ORDER_STATUS.CONFIRMED,
+        ORDER_STATUS.QUEUED,
+      ].includes(existing.status)
+    ) {
+      return OrderResponses.invalidTransition(
+        'Only active delivery orders can be assigned.'
+      );
+    }
+
+    if (
+      existing.deliveryRider
+      && String(existing.deliveryRider) !== String(riderId)
+    ) {
+      return OrderResponses.riderConflict();
+    }
+
     return OrderResponses.notFound();
   }
-
-  if (!order.deliveryAddress) {
-    return OrderResponses.invalidTransition(
-      'Only delivery orders can be assigned to a rider.'
-    );
-  }
-
-  if (
-    ![
-      ORDER_STATUS.READY,
-      ORDER_STATUS.CONFIRMED,
-      ORDER_STATUS.QUEUED,
-    ].includes(order.status)
-  ) {
-    return OrderResponses.invalidTransition(
-      'Only active delivery orders can be assigned.'
-    );
-  }
-
-  if (order.deliveryRider && String(order.deliveryRider) !== String(riderId)) {
-    return OrderResponses.riderConflict();
-  }
-
-  order.deliveryRider = riderId;
-  await order.save();
 
   return OrderResponses.success(
     order,
