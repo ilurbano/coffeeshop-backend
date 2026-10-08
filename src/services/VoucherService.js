@@ -271,9 +271,12 @@ const claimVoucher = async (code, userId) => {
     return VoucherResponses.missingData(['code']);
   }
 
+  let template;
+  let publicUsageIncremented = false;
+
   try {
     const now = new Date();
-    const template = await VoucherTemplate.findOne({
+    template = await VoucherTemplate.findOne({
       'voucher.code': code.trim(),
     });
 
@@ -313,6 +316,8 @@ const claimVoucher = async (code, userId) => {
         { new: true }
       );
 
+      publicUsageIncremented = true;
+
       if (!claimed) {
         return VoucherResponses.unavailable(
           'Voucher public usage limit has been reached.'
@@ -329,6 +334,13 @@ const claimVoucher = async (code, userId) => {
 
     return VoucherResponses.success(instance, 'Voucher claimed successfully.');
   } catch (error) {
+    if (publicUsageIncremented) {
+      await VoucherTemplate.findByIdAndUpdate(
+        template._id,
+        { $inc: { usageCountPublic: -1 } }
+      );
+    }
+
     LogUtils.logError(`Error in claimVoucher: ${error.message}`);
     return GenericResponses.internalServerError();
   }
